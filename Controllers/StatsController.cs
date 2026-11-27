@@ -5,11 +5,11 @@ using Microsoft.EntityFrameworkCore;
 using BeFit.Data;
 using BeFit.Models;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Authorization; // NOWE
+using Microsoft.AspNetCore.Authorization;
 
 namespace BeFit.Controllers
 {
-    [Authorize] // Zabezpieczenie statystyk
+    [Authorize]
     public class StatsController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -29,12 +29,12 @@ namespace BeFit.Controllers
             var stats = _context.ExerciseEntries
                 .Include(e => e.ExerciseType)
                 .Include(e => e.WorkoutSession)
-                .Where(e => e.UserId == userId) // Filtr na użytkownika
+                .Where(e => e.UserId == userId && e.WorkoutSession!.StartTime >= fourWeeksAgo)
                 .GroupBy(e => e.ExerciseType!.Name)
                 .Select(g => new ExerciseStat
                 {
                     ExerciseName = g.Key,
-                    TimesPerformed = g.Count(e => e.WorkoutSession!.StartTime >= fourWeeksAgo),
+                    TimesPerformed = g.Count(), // Ilość wystąpień w tym przedziale czasowym
                     TotalReps = g.Sum(e => e.Sets * e.Reps),
                     AverageWeight = g.Average(e => e.Weight),
                     MaxWeight = g.Max(e => e.Weight)

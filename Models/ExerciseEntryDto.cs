@@ -10,16 +10,19 @@ namespace BeFit.Models
         [Display(Name = "Sesja treningowa")]
         public int WorkoutSessionId { get; set; }
 
-        [Required]
-        [Display(Name = "Obciążenie (kg)")]
+        [Required(ErrorMessage = "Obciążenie jest wymagane.")]
+        [Range(0.1, 1000, ErrorMessage = "Obciążenie musi wynosić od 0.1 do 1000 kg.")]
+        [Display(Name = "Obciążenie (kg)", Description = "Podaj wagę w kilogramach.")]
         public double Weight { get; set; }
 
-        [Required]
-        [Display(Name = "Liczba serii")]
+        [Required(ErrorMessage = "Liczba serii jest wymagana.")]
+        [Range(1, 100, ErrorMessage = "Liczba serii musi wynosić od 1 do 100.")]
+        [Display(Name = "Liczba serii", Description = "Ile serii wykonałeś?")]
         public int Sets { get; set; }
 
-        [Required]
-        [Display(Name = "Powtórzenia w serii")]
+        [Required(ErrorMessage = "Liczba powtórzeń jest wymagana.")]
+        [Range(1, 1000, ErrorMessage = "Liczba powtórzeń musi wynosić od 1 do 1000.")]
+        [Display(Name = "Powtórzenia w serii", Description = "Ile powtórzeń w jednej serii?")]
         public int Reps { get; set; }
     }
 }
